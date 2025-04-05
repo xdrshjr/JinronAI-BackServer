@@ -11,6 +11,7 @@
 - Agent 模式支持，可以方便地添加新的 Agent 服务
 - SQLAlchemy ORM 数据库访问
 - 错误处理和日志记录
+- MCP（Model Context Protocol）服务支持，提供天气查询功能
 
 ## 项目结构
 
