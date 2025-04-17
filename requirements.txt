@@ -11,4 +11,9 @@ pytest==7.4.3
 pytest-flask==1.2.0
 pytest-cov==4.1.0
 mcp>=1.0.0
-requests>=2.28.0 
+requests==2.31.0
+python-dotenv==1.0.0
+argparse==1.4.0
+bs4
+arxiv
+trafilatura

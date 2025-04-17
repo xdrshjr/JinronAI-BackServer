@@ -1,0 +1,13 @@
+Category,Task Name,Description,Due Date,Priority,Status
+Work,Prepare Presentation,Finish slides for quarterly meeting,2025-04-20,High,In Progress
+Work,Email Client,Send project update to client,2025-04-17,Medium,Not Started
+Work,Team Meeting,Weekly sync-up with team,2025-04-18,Low,Completed
+Personal,Grocery Shopping,Buy groceries for the week,2025-04-18,Medium,Not Started
+Personal,Call Mom,Catch up with mom over the phone,2025-04-19,High,Completed
+Personal,Read Book,Finish reading "Atomic Habits",2025-04-25,Low,In Progress
+Fitness,Go for a Run,Jog at the local park,2025-04-16,High,Not Started
+Fitness,Yoga Session,Attend evening yoga class,2025-04-17,Medium,Not Started
+Fitness,Track Calories,Log meals in app,2025-04-16,Low,In Progress
+Learning,Finish Online Course,Complete module 3 of Python course,2025-04-21,High,Not Started
+Learning,Practice Spanish,30 minutes of Duolingo,2025-04-18,Medium,In Progress
+Learning,Watch TED Talk,Watch "The Power of Habits",2025-04-20,Low,Not Started

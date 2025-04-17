@@ -1,0 +1,33 @@
+{
+  "mcpServers": {
+    "dolphin-demo-database-sqlite": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-sqlite",
+        "--db-path",
+        "~/.dolphin/dolphin.db"
+      ]
+    },
+    "fetch": {
+      "command": "uvx",
+      "args": [
+        "mcp-server-fetch"
+      ],
+      "requires_confirmation": [
+        "fetch"
+      ],
+      "enabled": true,
+      "exclude_tools": []
+    }
+  },
+  "models": [
+    {
+      "model": "gpt-4o",
+      "title": "gpt-4o",
+      "systemMessage": "You are an expert assistant. You give helpful and concise responses.",
+      "provider": "openai",
+      "apiBase": "https://xiaoai.plus/v1",
+      "apiKey": "sk-PagpyNwAitZjhGzzrWKUssACvvFk28U8O4dmypPxEkrRo2jh"
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "systemPrompt": "您是一个AI助手，帮助用户完成各种任务。今天是 {today_datetime}。我旨在提供清晰、准确和有用的回应。",
+  "llm": {
+    "provider": "anthropic",
+    "model": "claude-3-5-sonnet-20241022",
+    "api_key": "sk-PagpyNwAitZjhGzzrWKUssACvvFk28U8O4dmypPxEkrRo2jh",
+    "temperature": 0
+  },
+  "mcpServers": {
+    "python-commands": {
+      "command": "python",
+      "args": ["-m", "mcp.server.commands"],
+      "requires_confirmation": [
+        "run_command",
+        "run_script"
+      ]
+    },
+    "python-fileio": {
+      "command": "python",
+      "args": ["-m", "mcp.server.fileio"]
+    }
+  }
+} 

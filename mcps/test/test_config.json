@@ -1,0 +1,23 @@
+{
+  "systemPrompt": "You are an AI assistant helping a software engineer...",
+  "llm": {
+    "provider": "openai",
+    "model": "gpt-4o",
+    "api_key": "sk-PagpyNwAitZjhGzzrWKUssACvvFk28U8O4dmypPxEkrRo2jh",
+    "temperature": 0.7,
+    "base_url": "https://xiaoai.plus/v1"  // Optional, for OpenRouter or other providers
+  },
+  "mcpServers": {
+    "fetch": {
+      "command": "uvx",
+      "args": ["mcp-server-fetch"],
+      "requires_confirmation": ["fetch"],
+      "enabled": true,  // Optional, defaults to true
+      "exclude_tools": []  // Optional, list of tool names to exclude
+    },
+    "youtube": {
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/adhikasp/mcp-youtube", "mcp-youtube"]
+    }
+  }
+}
