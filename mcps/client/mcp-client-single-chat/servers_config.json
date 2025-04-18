@@ -1,15 +1,11 @@
 {
   "mcpServers": {
     "sqlite": {
-      "command": "uvx",
+      "command": "/home/xdrshjr/.local/bin/uvx",
       "args": ["mcp-server-sqlite", "--db-path", "./test.db"]
     },
-    "puppeteer": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-puppeteer"]
-    },
     "fetch": {
-      "command": "uvx",
+      "command": "/home/xdrshjr/.local/bin/uvx",
       "args": [
         "mcp-server-fetch"
       ],

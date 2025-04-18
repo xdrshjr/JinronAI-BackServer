@@ -20,7 +20,8 @@ class Configuration:
     def __init__(self) -> None:
         """Initialize configuration with environment variables."""
         self.load_env()
-        self.api_key = os.getenv("GROQ_API_KEY")
+        self.api_key = os.getenv("LLM_API_KEY")
+        self.api_url = os.getenv("LLM_API_URL")
         # self.api_key = os.getenv("GITHUB_API_KEY")
 
     @staticmethod
@@ -59,6 +60,20 @@ class Configuration:
             raise ValueError("LLM_API_KEY not found in environment variables")
         return self.api_key
 
+    @property
+    def llm_api_url(self) -> str:
+        """Get the LLM API key.
+
+        Returns:
+            The API key as a string.
+
+        Raises:
+            ValueError: If the API key is not found in environment variables.
+        """
+        if not self.api_url:
+            raise ValueError("LLM_API_URL not found in environment variables")
+        return self.api_url
+
 
 class Server:
     """Manages MCP server connections and tool execution."""
@@ -68,7 +83,7 @@ class Server:
         self.config: Dict[str, Any] = config
         self.stdio_context: Optional[Any] = None
         self.session: Optional[ClientSession] = None
-        self._cleanup_lock: asyncio.Lock = asyncio.Lock()
+        self._cleanup_lock: asyncio.Lock = asyncio.Lock()   # 异步锁， 确保同一时刻只有一个协程进行系统资源清理
         self.capabilities: Optional[Dict[str, Any]] = None
 
     async def initialize(self) -> None:
@@ -225,18 +240,19 @@ class Tool:
                 args_desc.append(arg_desc)
         
         return f"""
-Tool: {self.name}
-Description: {self.description}
-Arguments:
-{chr(10).join(args_desc)}
-"""
+        Tool: {self.name}
+        Description: {self.description}
+        Arguments:
+        {chr(10).join(args_desc)}
+        """
 
 
 class LLMClient:
     """Manages communication with the LLM provider."""
 
-    def __init__(self, api_key: str) -> None:
+    def __init__(self, api_key: str, api_url: str) -> None:
         self.api_key: str = api_key
+        self.api_url: str = api_url
 
     def get_response(self, messages: List[Dict[str, str]]) -> str:
         """Get a response from the LLM.
@@ -250,16 +266,13 @@ class LLMClient:
         Raises:
             RequestException: If the request to the LLM fails.
         """
-        url = "https://xiaoai.plus/v1/chat/completions"
-        # url = "https://models.inference.ai.azure.com/chat/completions"
-
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.api_key}"
         }
         payload = {
             "messages": messages,
-            "model": "gpt-4o",
+            "model": "gpt-4o-mini",
             "temperature": 0.7,
             "max_tokens": 4096,
             "top_p": 1,
@@ -275,7 +288,7 @@ class LLMClient:
         # }
         
         try:
-            response = requests.post(url, headers=headers, json=payload)
+            response = requests.post(self.api_url, headers=headers, json=payload)
             response.raise_for_status()
             data = response.json()
             return data['choices'][0]['message']['content']
@@ -369,25 +382,25 @@ class ChatSession:
             
             system_message = f"""You are a helpful assistant with access to these tools: 
 
-{tools_description}
-Choose the appropriate tool based on the user's question. If no tool is needed, reply directly.
-
-IMPORTANT: When you need to use a tool, you must ONLY respond with the exact JSON object format below, nothing else:
-{{
-    "tool": "tool-name",
-    "arguments": {{
-        "argument-name": "value"
-    }}
-}}
-
-After receiving a tool's response:
-1. Transform the raw data into a natural, conversational response
-2. Keep responses concise but informative
-3. Focus on the most relevant information
-4. Use appropriate context from the user's question
-5. Avoid simply repeating the raw data
-
-Please use only the tools that are explicitly defined above."""
+            {tools_description}
+            Choose the appropriate tool based on the user's question. If no tool is needed, reply directly.
+            
+            IMPORTANT: When you need to use a tool, you must ONLY respond with the exact JSON object format below, nothing else:
+            {{
+                "tool": "tool-name",
+                "arguments": {{
+                    "argument-name": "value"
+                }}
+            }}
+            
+            After receiving a tool's response:
+            1. Transform the raw data into a natural, conversational response
+            2. Keep responses concise but informative
+            3. Focus on the most relevant information
+            4. Use appropriate context from the user's question
+            5. Avoid simply repeating the raw data
+            
+            Please use only the tools that are explicitly defined above."""
 
             messages = [
                 {
@@ -433,7 +446,7 @@ async def main() -> None:
     config = Configuration()
     server_config = config.load_config('servers_config.json')
     servers = [Server(name, srv_config) for name, srv_config in server_config['mcpServers'].items()]
-    llm_client = LLMClient(config.llm_api_key)
+    llm_client = LLMClient(config.llm_api_key, config.llm_api_url)
     chat_session = ChatSession(servers, llm_client)
     await chat_session.start()
 
